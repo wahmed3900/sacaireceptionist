@@ -191,8 +191,6 @@ app.get('/health', (_, res) => res.send('Missed-call text-back + AI receptionist
 // Privacy and Terms pages
 app.get('/privacy', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
-});
-
 app.get('/terms', (req, res) => {
   res.sendFile(path.join(__dirname, 'terms.html'));
 });
