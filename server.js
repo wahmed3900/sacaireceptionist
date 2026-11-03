@@ -190,7 +190,7 @@ app.get('/health', (_, res) => res.send('Missed-call text-back + AI receptionist
 
 // Privacy and Terms pages
 app.get('/privacy', (req, res) => {
-  res.sendFile(path.join(__dirname, 'privacy_5.html'));
+  res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
 });
 
 app.get('/terms', (req, res) => {
@@ -262,6 +262,86 @@ app.all('/outreach-twiml', (req, res) => {
   const connect = twiml.connect({ action: '/relay-end' });
   connect.conversationRelay({
     url: PUBLIC_URL.replace(/^http/, 'ws') + '/relay',
+    welcomeGreeting:
+      `Hi there! I'm calling from ${biz.name}. ` +
+      `We help local businesses never miss a sales call — our AI answers when you're busy ` +
+      `and automatically texts back missed callers. We also do professional website redesigns. ` +
+      `Is this a good time to hear more? Just say yes or no.`,
+    ...(biz.aiVoice ? { voice: biz.aiVoice } : {}),
+  });
+  res.type('text/xml').send(twiml.toString());
+});
+
+app.post('/outreach-status', verifyTwilio, (req, res) => {
+  const { To, CallStatus } = req.body;
+  console.log(`[Outreach] Call to ${To} ended: ${CallStatus}`);
+  const log = outreach.loadLog();
+  if (log[To]) {
+    log[To].call_status = CallStatus;
+    log[To].call_updated_at = new Date().toISOString();
+    outreach.saveLog(log);
+  }
+  res.sendStatus(200);
+});
+
+app.get('/outreach-log', requireAdmin, (req, res) => {
+  res.json(outreach.loadLog());
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+// WebSocket for the AI receptionist with secure upgrade handling
+const server = http.createServer(app);
+const wss = new WebSocketServer({ noServer: true });
+
+server.on('upgrade', (req, socket, head) => {
+  const requestUrl = req.url || '/';
+  const pathname = requestUrl.split('?')[0];
+  if (pathname !== '/relay') {
+    socket.destroy();
+    return;
+  }
+
+  const allowLocalBypass = SKIP_SIGNATURE_CHECK === 'true' && process.env.NODE_ENV !== 'production';
+
+  if (!allowLocalBypass && (!TWILIO_AUTH_TOKEN || !PUBLIC_URL)) {
+    socket.write('HTTP/1.1 503 Service Unavailable\r\nConnection: close\r\n\r\n');
+    socket.destroy();
+    return;
+  }
+
+  let valid = allowLocalBypass;
+  if (!allowLocalBypass) {
+    const signature = req.headers['x-twilio-signature'] || '';
+    const signatureUrl = PUBLIC_URL.replace(/\/$/, '').replace(/^https:/i, 'wss:').replace(/^http:/i, 'ws:') + requestUrl;
+    try {
+      valid = twilio.validateRequest(TWILIO_AUTH_TOKEN, signature, signatureUrl, {});
+    } catch (e) {
+      valid = false;
+    }
+  }
+
+  if (!valid) {
+    socket.write('HTTP/1.1 403 Forbidden\r\nConnection: close\r\n\r\n');
+    socket.destroy();
+    return;
+  }
+
+  wss.handleUpgrade(req, socket, head, (ws) => {
+    wss.emit('connection', ws, req);
+  });
+});
+
+wss.on('connection', (ws) => {
+  console.log('>>> WebSocket /relay connected');
+  handleSession(ws, { getBiz, sendSms });
+});
+
+if (require.main === module) {
+  server.listen(PORT, () => console.log(`Listening on ${PORT}`));
+}
+module.exports = { app, server, wss, lastCustomer, getBiz, sendSms };
+/, 'ws') + '/relay',
     welcomeGreeting:
       `Hi there! I'm calling from ${biz.name}. ` +
       `We help local businesses never miss a sales call — our AI answers when you're busy ` +
