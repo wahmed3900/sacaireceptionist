@@ -30,7 +30,7 @@ async function smsProspect(client, fromNumber, toPhone, bizName) {
     `AI answers your missed calls and texts customers back automatically. ` +
     `We also do professional website redesigns. Reply YES for a free demo!`;
 
-  const msg = await client.messages.create({ from: fromNumber, to: toPhone, body });
+  const msg = await client.messages.create({ messagingServiceSid: 'MG3827e87eac3e40791a9d3a6b495a5e12', to: toPhone, body });
 
   const db = await getDb();
   await db.collection('outreach_log').updateOne(
