@@ -15,7 +15,7 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use((req, res, next) => {
   console.log(`>>> ${req.method} ${req.originalUrl} | To=${req.body?.To} From=${req.body?.From}`);
-  next();
+  next()
 });
 
 const {
@@ -54,7 +54,7 @@ function verifyTwilio(req, res, next) {
 
 async function sendSms(from, to, body) {
   if (!client) return console.log(`[DRY RUN] SMS ${from} -> ${to}: ${body}`);
-  await client.messages.create({ from, to, body });
+  await client.messages.create({ messagingServiceSid: 'MG3827e87eac3e40791a9d3a6b495a5e12', to, body });
 }
 
 // Hand the call to the AI receptionist
