@@ -197,6 +197,48 @@ app.get('/terms', (req, res) => {
   res.sendFile(path.join(__dirname, 'terms.html'));
 });
 
+// ─── MONDAY.COM LEAD CAPTURE ────────────────────────────────────────────────
+// Push each demo form submission into the monday.com pipeline board
+async function createMondayLead(lead) {
+  const token = process.env.MONDAY_API_TOKEN;
+  if (!token) return;
+  const tradeMap = {
+    hvac: 'HVAC', 'air conditioning': 'HVAC', plumbing: 'Plumbing',
+    electrical: 'Electrical', electrician: 'Electrical',
+    roofing: 'Roofing', 'auto repair': 'Auto Repair', auto: 'Auto Repair',
+  };
+  const bizType = tradeMap[(lead.trade || '').toLowerCase()] || 'Other';
+  const today = new Date().toISOString().slice(0, 10);
+  const noteText = [
+    lead.missedCalls ? `Missed calls/week: ${lead.missedCalls}` : '',
+    lead.notes,
+    'Source: sacaireceptionist.com demo form',
+  ].filter(Boolean).join('\n');
+  const colVals = JSON.stringify({
+    text_mm90hyms:     lead.name,
+    phone_mm90fbd7:    { phone: lead.phone.replace(/[^\d+]/g, ''), countryShortName: 'US' },
+    email_mm90jwx2:    lead.email ? { email: lead.email, text: lead.email } : null,
+    dropdown_mm90madz: { labels: [bizType] },
+    color_mm901zem:    { label: 'New Lead' },
+    date_mm90a5q:      { date: today },
+    long_text_mm906k4g: { text: noteText },
+  });
+  const q = `mutation { create_item(board_id: 18439440348, group_id: "topics", item_name: ${JSON.stringify(lead.business)}, column_values: ${JSON.stringify(colVals)}, create_labels_if_missing: true) { id } }`;
+  try {
+    const r = await fetch('https://api.monday.com/v2', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: token },
+      body: JSON.stringify({ query: q }),
+    });
+    const data = await r.json();
+    if (data.errors) console.error('[Monday] API error:', JSON.stringify(data.errors));
+    else console.log('[Monday] Lead created, item id:', data?.data?.create_item?.id);
+  } catch (e) {
+    console.error('[Monday] Failed to create lead:', e.message);
+  }
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 app.post('/demo-request', async (req, res) => {
   const b = req.body || {};
   if (b.website) return res.json({ ok: true }); // spam bot filled the hidden field
@@ -219,7 +261,8 @@ app.post('/demo-request', async (req, res) => {
   } catch (e) {
     console.error('Demo request text failed:', e.message);
   }
-  res.json({ ok: true });
+    createMondayLead(lead).catch(e => console.error('[Monday] Unhandled:', e.message));
+res.json({ ok: true });
 });
 
 // ─── OUTREACH ROUTES ────────────────────────────────────────────────────────
