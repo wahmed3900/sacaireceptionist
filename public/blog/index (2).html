@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blog | Sac AI Receptionist</title>
+<meta name="description" content="Tips and guides for Sacramento-area service businesses on never losing a job to a missed call.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #16213A; --navy-2: #22304F; --paper: #F6F7F9; --white: #FFFFFF;
+  --ink: #1A1E25; --muted: #5A6372; --line: #DCE0E6;
+  --amber: #F2B33D; --blue: #2F6FED; --radius-lg: 28px; --radius-sm: 8px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-variation-settings: "wdth" 100;
+  color: var(--ink); background: var(--paper);
+  line-height: 1.55; font-size: 17px;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+.top { background: var(--navy); color: var(--white); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.brand { font-weight: 700; font-variation-settings: "wdth" 80; font-size: 19px; text-decoration: none; letter-spacing: .01em; }
+.brand span { color: var(--amber); }
+.top a.call { text-decoration: none; font-weight: 600; font-size: 15px; padding: 9px 16px; border: 1.5px solid rgba(255,255,255,.35); border-radius: var(--radius-sm); }
+.top a.call:hover { border-color: var(--amber); }
+
+.page-hero { background: var(--navy); color: var(--white); padding: 56px 0 64px; }
+.page-hero h1 { margin: 0 0 12px; font-weight: 800; font-variation-settings: "wdth" 66; font-size: clamp(36px, 5vw, 60px); line-height: 1; }
+.page-hero p { margin: 0; color: #C9D1E0; font-size: 18px; }
+
+.blog-grid { padding: 64px 0 96px; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+
+.card { background: var(--white); border-radius: 16px; overflow: hidden; border: 1px solid var(--line); display: flex; flex-direction: column; }
+.card-body { padding: 24px 24px 20px; flex: 1; display: flex; flex-direction: column; }
+.card-tag { display: inline-block; background: #EAF0FF; color: var(--blue); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; margin-bottom: 14px; }
+.card h2 { margin: 0 0 10px; font-size: 20px; font-weight: 700; font-variation-settings: "wdth" 80; line-height: 1.2; }
+.card p { margin: 0 0 20px; color: var(--muted); font-size: 15px; flex: 1; }
+.card-meta { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+.card a.read { text-decoration: none; font-weight: 700; color: var(--blue); font-size: 15px; }
+.card a.read:hover { text-decoration: underline; }
+
+.cta-strip { background: var(--navy); color: var(--white); padding: 56px 0; text-align: center; }
+.cta-strip h2 { margin: 0 0 12px; font-weight: 800; font-variation-settings: "wdth" 66; font-size: clamp(28px, 4vw, 44px); }
+.cta-strip p { margin: 0 0 28px; color: #C9D1E0; font-size: 18px; }
+.btn { display: inline-block; background: var(--amber); color: var(--navy); font-family: inherit; font-weight: 700; font-size: 17px; padding: 16px 28px; border-radius: var(--radius-sm); text-decoration: none; border: 0; cursor: pointer; }
+.btn:hover { background: #F6C463; }
+
+footer { padding: 32px 0; font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); }
+footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+footer a { text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+@media (max-width: 860px) { .grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/">Sac <span>AI</span> Receptionist</a>
+    <a class="call" href="tel:+19163138648">(916) 313-8648</a>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <h1>Tips for Local Service Businesses</h1>
+    <p>Practical guides on capturing more calls, booking more jobs, and running a tighter operation.</p>
+  </div>
+</section>
+
+<section class="blog-grid">
+  <div class="wrap">
+    <div class="grid">
+
+      <article class="card">
+        <div class="card-body">
+          <span class="card-tag">HVAC</span>
+          <h2>Why Missed Calls Are Costing Sacramento HVAC Businesses Thousands</h2>
+          <p class="card-meta">November 10, 2026 · 5 min read</p>
+          <p>When you're on a job site, you can't answer every call. But each missed call is a potential customer who's already dialing your competitor.</p>
+          <a class="read" href="/blog/why-missed-calls-kill-hvac-businesses.html">Read the article →</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-body">
+          <span class="card-tag">Plumbing</span>
+          <h2>How Sacramento Plumbers Can Stop Losing Jobs to Voicemail</h2>
+          <p class="card-meta">November 10, 2026 · 4 min read</p>
+          <p>A dripping faucet caller who hits voicemail will find another plumber in 60 seconds. Here's how to make sure that doesn't happen to you.</p>
+          <a class="read" href="/blog/how-sacramento-plumbers-stop-losing-jobs-to-voicemail.html">Read the article →</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-body">
+          <span class="card-tag">Electrical</span>
+          <h2>After-Hours Calls: How Sacramento Electricians Can Capture Every Lead</h2>
+          <p class="card-meta">November 10, 2026 · 4 min read</p>
+          <p>Most electrical emergencies happen evenings and weekends. If nobody picks up, that job goes somewhere else. It doesn't have to.</p>
+          <a class="read" href="/blog/electrician-after-hours-calls-sacramento.html">Read the article →</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="cta-strip">
+  <div class="wrap">
+    <h2>Never lose a job to a missed call.</h2>
+    <p>Try Sac AI Receptionist free for 14 days. No contract, no setup fee.</p>
+    <a class="btn" href="/#demo">Start your free trial</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Sac AI Receptionist, Sacramento, CA</span>
+    <span style="display:flex;gap:20px;">
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="mailto:wahmed07860786@gmail.com">wahmed07860786@gmail.com</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
