@@ -194,7 +194,7 @@ app.get('/privacy', (req, res) => {
 });
 
 app.get('/terms', (req, res) => {
-  res.sendFile(path.join(__dirname, 'terms.html'));
+  res.sendFile(path.join(__dirname, 'public', 'terms.html'));
 });
 
 // ─── MONDAY.COM LEAD CAPTURE ────────────────────────────────────────────────

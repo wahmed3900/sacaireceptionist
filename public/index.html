@@ -655,31 +655,33 @@
   <div class="form-card">
     <div class="speed-proof">⚡ Texted back in under 8 seconds — your customers won't wait, and neither will we</div>
 
-    <form>
+    <form id="trial-form">
+      <!-- honeypot: bots fill this, humans don't -->
+      <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off" />
       <div class="form-row">
         <div class="field">
           <label>Your name</label>
-          <input type="text" placeholder="John Smith" />
+          <input type="text" name="name" placeholder="John Smith" required />
         </div>
         <div class="field">
           <label>Business name</label>
-          <input type="text" placeholder="Valley Plumbing" />
+          <input type="text" name="business" placeholder="Valley Plumbing" required />
         </div>
       </div>
       <div class="form-row">
         <div class="field">
           <label>Phone</label>
-          <input type="tel" placeholder="(916) 555-0123" />
+          <input type="tel" name="phone" placeholder="(916) 555-0123" required />
         </div>
         <div class="field">
           <label>Email <span class="opt">(optional)</span></label>
-          <input type="email" placeholder="you@example.com" />
+          <input type="email" name="email" placeholder="you@example.com" />
         </div>
       </div>
       <div class="form-row">
         <div class="field">
           <label>Business type</label>
-          <select>
+          <select name="trade">
             <option value="">Choose one</option>
             <option>HVAC</option>
             <option>Plumbing</option>
@@ -694,7 +696,7 @@
         </div>
         <div class="field">
           <label>Missed calls per week</label>
-          <select>
+          <select name="missedCalls">
             <option value="">Rough guess</option>
             <option>Not sure</option>
             <option>1 to 5</option>
@@ -705,14 +707,60 @@
       </div>
       <div class="field">
         <label>Anything else? <span class="opt">(optional)</span></label>
-        <textarea placeholder="Any questions or details about your business..."></textarea>
+        <textarea name="notes" placeholder="Any questions or details about your business..."></textarea>
       </div>
       <div class="consent-row">
-        <input type="checkbox" id="consent" />
+        <input type="checkbox" id="consent" name="consent" required />
         <label for="consent">I agree to receive text messages from Sac AI Receptionist about setting up my trial. Msg &amp; data rates may apply. Reply STOP to opt out. See our <a href="/privacy.html">Privacy Policy</a> and <a href="/terms.html">Terms</a>.</label>
       </div>
-      <button type="submit" class="submit-btn">🔧 Get My Free Trial Set Up →</button>
+      <div id="form-msg" style="display:none;padding:12px 16px;border-radius:8px;font-size:15px;margin-bottom:12px;"></div>
+      <button type="submit" class="submit-btn" id="submit-btn">🔧 Get My Free Trial Set Up →</button>
     </form>
+    <script>
+    document.getElementById('trial-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var btn = document.getElementById('submit-btn');
+      var msg = document.getElementById('form-msg');
+      var consent = document.getElementById('consent');
+      if (!consent.checked) {
+        msg.textContent = 'Please check the consent box to continue.';
+        msg.style.display = 'block';
+        msg.style.background = '#fff3cd';
+        msg.style.color = '#856404';
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      msg.style.display = 'none';
+      var data = {};
+      new FormData(this).forEach(function(v, k) { data[k] = v; });
+      try {
+        var res = await fetch('/demo-request', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        var json = await res.json();
+        if (res.ok && json.ok) {
+          msg.textContent = "✅ Got it! We'll reach out within one business day to get you set up.";
+          msg.style.background = '#d1fae5';
+          msg.style.color = '#065f46';
+          msg.style.display = 'block';
+          btn.textContent = '✓ Request Sent';
+          this.querySelectorAll('input,select,textarea').forEach(function(el) { el.disabled = true; });
+        } else {
+          throw new Error(json.error || 'Something went wrong.');
+        }
+      } catch (err) {
+        msg.textContent = '❌ ' + err.message + ' Try calling (916) 313-8648 instead.';
+        msg.style.background = '#fee2e2';
+        msg.style.color = '#991b1b';
+        msg.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = '🔧 Get My Free Trial Set Up →';
+      }
+    });
+    </script>
     <p class="form-footer">Your details are only used to contact you about your trial. · Prefer to talk? Call or text <strong>(916) 313-8648</strong></p>
   </div>
 </section>
