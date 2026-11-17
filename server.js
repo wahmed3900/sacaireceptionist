@@ -55,7 +55,13 @@ function verifyTwilio(req, res, next) {
 
 async function sendSms(from, to, body) {
   if (!client) return console.log(`[DRY RUN] SMS ${from} -> ${to}: ${body}`);
-  await client.messages.create({ messagingServiceSid: 'MG3827e87eac3e40791a9d3a6b495a5e12', to, body });
+  try {
+    const msg = await client.messages.create({ messagingServiceSid: 'MG3827e87eac3e40791a9d3a6b495a5e12', to, body });
+    console.log(`[SMS SENT] to=${to} sid=${msg.sid} status=${msg.status}`);
+  } catch (e) {
+    console.error(`[SMS ERROR] to=${to} code=${e.code} status=${e.status} msg=${e.message}`);
+    throw e;
+  }
 }
 
 // Hand the call to the AI receptionist
