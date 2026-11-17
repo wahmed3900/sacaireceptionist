@@ -292,7 +292,7 @@ app.post('/demo-request', async (req, res) => {
   createMondayLead(lead).catch(e => console.error('[Monday] Unhandled:', e.message));
 
   // Fire Make webhook for lead follow-up sequence
-  const MAKE_WEBHOOK = process.env.MAKE_LEAD_WEBHOOK || 'https://hook.us2.make.com/qxv83emikp4a60pir2g4xnq6hpqvqlic';
+  const MAKE_WEBHOOK = process.env.MAKE_LEAD_WEBHOOK || 'https://hook.us2.make.com/a4suor2a087uw9hq1myxw7dc24admig6';
   fetch(MAKE_WEBHOOK, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
