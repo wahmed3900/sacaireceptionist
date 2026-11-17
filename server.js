@@ -28,6 +28,8 @@ const {
 } = process.env;
 
 const client = TWILIO_ACCOUNT_SID ? twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN) : null;
+console.log(`[BOOT] Twilio client: ${client ? 'ACTIVE (SID=' + TWILIO_ACCOUNT_SID?.slice(0,8) + '...)' : 'MISSING — TWILIO_ACCOUNT_SID not set, SMS disabled'}`);
+
 const { VoiceResponse, MessagingResponse } = twilio.twiml;
 
 // clients.json maps each Twilio number -> business settings
