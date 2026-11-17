@@ -289,8 +289,27 @@ app.post('/demo-request', async (req, res) => {
   } catch (e) {
     console.error('Demo request text failed:', e.message);
   }
-    createMondayLead(lead).catch(e => console.error('[Monday] Unhandled:', e.message));
-res.json({ ok: true });
+  createMondayLead(lead).catch(e => console.error('[Monday] Unhandled:', e.message));
+
+  // Fire Make webhook for lead follow-up sequence
+  const MAKE_WEBHOOK = process.env.MAKE_LEAD_WEBHOOK || 'https://hook.us2.make.com/qxv83emikp4a60pir2g4xnq6hpqvqlic';
+  fetch(MAKE_WEBHOOK, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: lead.name,
+      business: lead.business,
+      phone: lead.phone,
+      email: lead.email,
+      trade: lead.trade,
+      missedCalls: lead.missedCalls,
+      notes: lead.notes,
+      source: 'website-form',
+      submittedAt: new Date().toISOString(),
+    }),
+  }).catch(e => console.error('[Make] Webhook failed:', e.message));
+
+  res.json({ ok: true });
 });
 
 // ─── OUTREACH ROUTES ────────────────────────────────────────────────────────
