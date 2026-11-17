@@ -206,6 +206,23 @@ app.get('/terms', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'terms.html'));
 });
 
+// Trade-specific SEO landing pages
+app.get('/sacramento-hvac', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'sacramento-hvac.html'));
+});
+
+app.get('/sacramento-plumbing', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'sacramento-plumbing.html'));
+});
+
+app.get('/sacramento-electricians', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'sacramento-electricians.html'));
+});
+
+app.get('/sacramento-roofing', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'sacramento-roofing.html'));
+});
+
 // ─── MONDAY.COM LEAD CAPTURE ────────────────────────────────────────────────
 // Push each demo form submission into the monday.com pipeline board
 async function createMondayLead(lead) {
