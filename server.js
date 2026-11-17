@@ -131,7 +131,9 @@ app.post('/relay-end', verifyTwilio, (req, res) => {
   const biz = getBiz(req.body.To);
   const twiml = new VoiceResponse();
   let handoff = {};
-  try { handoff = JSON.parse(req.body.HandoffData || '{}'); } catch {}
+  try { handoff = JSON.parse(req.body.HandoffData || '{}'); } catch (e) {
+    console.error('[Handoff] Failed to parse HandoffData JSON:', e.message);
+  }
 
   if (biz && handoff.reason === 'transfer') {
     const dial = twiml.dial({ timeout: biz.ringSeconds || 20, callerId: req.body.From });
