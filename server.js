@@ -299,7 +299,7 @@ app.post('/demo-request', async (req, res) => {
     body: JSON.stringify({
       name: lead.name,
       business: lead.business,
-      phone: lead.phone,
+      phone: lead.phone.replace(/[^\d]/g, ''),
       email: lead.email,
       trade: lead.trade,
       missedCalls: lead.missedCalls,
